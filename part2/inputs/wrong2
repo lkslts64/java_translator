@@ -1,0 +1,19 @@
+name()  {
+        "John"
+    }
+    
+    surname() {
+        "Doe"
+    }
+    
+    fullname(first_name, sep, last_name) {
+        first_name + sep + last_name
+    }
+	
+    name(if ("a" prefix "a") "a" else "a")
+    surname()
+	//func def after call -> should generate error
+	foo(s,loukas,litsos,petname,passwd) {
+		"Give all personal data"
+	}
+    fullname(name(), " ", surname())

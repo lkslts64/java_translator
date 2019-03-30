@@ -1,0 +1,8 @@
+something() {
+	"I want call this anyways"
+}
+
+foo(arg1,arg2) {
+	"Never Called"
+}
+

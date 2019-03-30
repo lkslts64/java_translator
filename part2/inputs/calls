@@ -1,0 +1,4 @@
+foo(arg)
+bar(s+s2+s3+s4)
+
+another_call(random)

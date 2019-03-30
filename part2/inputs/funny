@@ -1,0 +1,18 @@
+concat(s) {
+	if ( s prefix s)
+		"Compilers is the best course!"
+	else
+		"Compilers is the worst course!"
+	+ 
+	if (s suffix s)
+		"Instructor, please give 100/100."
+	else
+		"Instructor, I copied this project from a colleague, I cheated!"
+	+
+	if ("script"  suffix s)
+		"Just test your test_cases with command : $./test_script.sh [input_file]"
+	else
+		"Unknown"
+}
+
+concat("Javascript")

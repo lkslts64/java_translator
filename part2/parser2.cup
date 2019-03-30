@@ -1,0 +1,75 @@
+import java_cup.runtime.*;
+
+parser code {:
+    // Connect this parser to a scanner!
+    Scanner s;
+	Parser(Scanner s){ this.s=s; }
+:}
+scan with {: return s.next_token(); :};
+
+terminal IF, ELSE, PREFIX, SUFFIX, PLUS, RPAREN, LPAREN, RBRACK, LBRACK, COMMA;
+terminal String STRING_LITERAL, ID;
+
+non terminal String program, defs, calls,  def, block,  arg_list, arg_list2, logical, arg_list_d,arg_list2_d,call_print,expr, if_else, call,else,expr_without_ID;
+
+precedence left SUFFIX, PREFIX;
+//you can interchange the following two lines if you want...
+precedence left PLUS;
+precedence left IF,ELSE;
+
+start with program;
+
+program ::= defs:d1   calls:c1 					{: RESULT = "public class Main {\n" + "\tpublic static void main(String []args) {\n" + c1 + "\t}\n" + d1 +  "\n}";System.out.println(RESULT); :}
+;
+defs ::= defs:def1 def:def2						{: RESULT = def1 + def2; :}
+		|  										{: RESULT = ""; :}			
+;
+
+calls ::= call_print:c1 calls:c2 				{: RESULT = c1 + c2; :}						           
+		| 										{: RESULT = "";	:}
+;
+
+def ::= ID:id  arg_list_d:arg block:blck  {: RESULT = "\tpublic static String " + id + arg + blck + "\n"; :}
+;
+call_print ::= call:c1  						{: RESULT = "\t\tSystem.out.println( " + c1 + ");\n"; :}
+;
+call ::= ID:id arg_list:arg 					{: RESULT = id + arg ; :}
+;
+
+block ::=  LBRACK expr:e1 RBRACK					{: RESULT =" {\n\t\treturn " + e1 + ";\n\t}"; :}
+;
+
+arg_list_d ::= LPAREN ID:ident arg_list2_d:arg  			   {: RESULT = "(String" + " " + ident + arg  ; :}
+			| LPAREN RPAREN    								   {: RESULT = "()"; :}
+
+;
+
+arg_list2_d ::=   COMMA ID:ident arg_list2_d:arg			   {: RESULT = "," + "String" + " " + ident + arg; :}
+				| RPAREN									   {: RESULT =  ")"; :}
+;
+
+arg_list ::= LPAREN expr_without_ID:e1 arg_list2:arg    			   {: RESULT = "(" + e1 + arg ; :}
+			| LPAREN ID:ident arg_list2:arg 						   {: RESULT = "(" + ident + arg; :}
+			| LPAREN RPAREN 										   {: RESULT = "()"; :}
+;
+
+arg_list2 ::=  COMMA expr_without_ID:e1 arg_list2:arg			   {: RESULT =  "," + e1 + arg; :}
+			|  COMMA ID:ident arg_list2:arg			   			   {: RESULT =  "," + ident + arg; :} 	
+			|  RPAREN								   			   {: RESULT = ")"; :}
+;
+expr_without_ID ::=  expr:e1 PLUS expr:e2 							       {: RESULT = e1  + " + " + e2; :} 
+		| STRING_LITERAL:str									   {: RESULT = '\"' + str + '\"'; :}
+		| call:c 												   {: RESULT = c ; :}
+		| if_else:ie											   {: RESULT =  "(" + ie + ")"   ; :}
+;
+expr ::= expr_without_ID:e1										   {: RESULT = e1; :}
+		 | ID:ident												   {: RESULT = ident; :}
+;
+logical ::= expr:e1 PREFIX expr:e2						       {: RESULT = "(" + e2 +  ")" + ".startsWith(" + e1 + ")"; :}
+			| expr:e1 SUFFIX expr:e2						   {: RESULT =  "(" + e2 +  ")" + ".endsWith(" + e1 + ")" ; :}	
+;
+if_else ::= IF LPAREN logical:log RPAREN else:el  {: RESULT =  "(" + log + ") ?" + el  ; :} 
+;
+
+else ::= expr:e1 ELSE expr:e2 								  {: RESULT = e1 + ":" + e2 ; :}
+;

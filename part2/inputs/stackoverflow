@@ -1,0 +1,13 @@
+complex(s) {
+	if ( if ( if ("script" suffix s) s + "script" else s + "Unknown" suffix s + "scriptscript" ) s else s prefix "Java" ) 
+		s
+	else
+		complex("Javascript")
+	+
+	if (s prefix s)
+		s
+	else
+	 	s
+}
+
+complex("Random")

@@ -1,0 +1,20 @@
+name() {
+        "John"
+    }
+
+    repeat(x) {
+        x + x
+    }
+
+    cond_repeat(c, x) {
+        if (c prefix "yes")
+            if("yes" prefix c)
+                repeat(x)
+            else
+                x
+        else
+            x
+    }
+
+    repeat("yes" + name() + repeat("John") + cond_repeat("yes","Best Grammar ever made") + if ("java" prefix "javascript") cond_repeat("yes","Compilers Is the Best") else "unknown")
+    cond_repeat("no", "Jane")
